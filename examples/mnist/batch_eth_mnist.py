@@ -361,7 +361,8 @@ for step, batch in enumerate(test_dataset):
         proportions=proportions,
         n_labels=n_classes,
     )
-
+    spikes = spike_record.sum(1)
+    print(spikes)
     # Compute network accuracy according to available classification strategies.
     accuracy["all"] += float(torch.sum(label_tensor.long() == all_activity_pred).item())
     accuracy["proportion"] += float(
