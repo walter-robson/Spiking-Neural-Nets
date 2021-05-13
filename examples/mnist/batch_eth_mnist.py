@@ -381,6 +381,6 @@ print("\nAll activity accuracy: %.2f" % (accuracy["all"] / n_test))
 print("Proportion weighting accuracy: %.2f \n" % (accuracy["proportion"] / n_test))
 print("Number of spikes?? : ", num_spikes)
 print("number of hits: ", hits)
-print("get spike data: ", network.get_spike_data()) 
+
 print("Progress: %d / %d (%.4f seconds)" % (epoch + 1, n_epochs, t() - start))
 print("Testing complete.\n")
