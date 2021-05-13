@@ -18,6 +18,7 @@ from bindsnet.evaluation import (
     assign_labels,
 )
 from bindsnet.models import DiehlAndCook2015
+from bindsnet.pipeline.base_pipeline import BasePipeline
 from bindsnet.network.monitors import Monitor
 from bindsnet.utils import get_square_weights, get_square_assignments
 from bindsnet.analysis.plotting import (
@@ -334,6 +335,8 @@ network.train(mode=False)
 start = t()
 
 pbar = tqdm(total=n_test)
+num_spikes = 0
+hits = 0
 for step, batch in enumerate(test_dataset):
     if step > n_test:
         break
@@ -361,8 +364,9 @@ for step, batch in enumerate(test_dataset):
         proportions=proportions,
         n_labels=n_classes,
     )
-    spikes = spike_record.sum(1)
-    print(spikes)
+
+    num_spikes += spike_record.sum(1)
+    hits += 1
     # Compute network accuracy according to available classification strategies.
     accuracy["all"] += float(torch.sum(label_tensor.long() == all_activity_pred).item())
     accuracy["proportion"] += float(
@@ -375,6 +379,8 @@ for step, batch in enumerate(test_dataset):
 
 print("\nAll activity accuracy: %.2f" % (accuracy["all"] / n_test))
 print("Proportion weighting accuracy: %.2f \n" % (accuracy["proportion"] / n_test))
-
+print("Number of spikes?? : ", num_spikes)
+print("number of hits: ", hits)
+print("get spike data: ", network.get_spike_data()) 
 print("Progress: %d / %d (%.4f seconds)" % (epoch + 1, n_epochs, t() - start))
 print("Testing complete.\n")
